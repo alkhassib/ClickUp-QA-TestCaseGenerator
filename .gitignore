@@ -11,6 +11,9 @@ venv/
 # Logs
 *.log
 
+# Single-instance lock
+automation.lock
+
 # OS / editor
 .DS_Store
 .idea/
