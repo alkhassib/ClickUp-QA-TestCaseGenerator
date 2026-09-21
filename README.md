@@ -1,5 +1,7 @@
 # ClickUp QA Test-Case Generator
 
+**English** | [العربية](README.ar.md)
+
 A pure-Python script (no n8n) that pulls ready user stories from ClickUp,
 generates QA test cases via LangChain + GPT-5 Nano, and creates them back
 as new tasks in ClickUp.
