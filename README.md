@@ -61,9 +61,25 @@ TEST_CASE_LANGUAGE=ar   # Arabic (default)
 ```
 
 The setting is case-insensitive (`EN` == `en`) and controls the language of
-both the LLM output (titles, steps, expected results) and the labels in each
+both the LLM output (titles, location, steps, test data, expected results, notes) and the labels in each
 created ClickUp task's description. Any unsupported value stops the run with a
 clear error.
+
+Arabic output is written in Modern Standard Arabic. After every model call the
+script checks that the text is actually in the selected language; if it is not,
+it retries once with a stronger reminder and logs a warning if it is still wrong.
+
+## Test case structure
+
+Every generated test-case task contains at least:
+
+- **Type / Priority** - Positive/Negative/Edge and High/Medium/Low.
+- **Where** - the system/module and the screen the test runs on.
+- **Test data** - concrete values, or at least their type/format.
+- **Steps** - what the tester does, in order.
+- **Expected result** - a specific, verifiable outcome.
+- **Notes** (at the end of the ticket, only when needed) - any gap in the story
+  that affects the test, and the assumption the AI made because of it.
 
 ## Reliability note
 

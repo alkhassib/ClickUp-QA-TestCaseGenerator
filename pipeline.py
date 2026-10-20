@@ -15,18 +15,24 @@ logger = logging.getLogger("qa_automation")
 # تسميات وصف التكت حسب اللغة المختارة بالإعدادات
 _DESCRIPTION_LABELS = {
     "ar": {
-        "generated_from": "تست كيس مولد تلقائياً من القصة",
+        "generated_from": "حالة اختبار مولَّدة تلقائيًا من القصة",
         "type": "النوع",
         "priority": "الأولوية",
+        "location": "المكان (النظام / الشاشة)",
         "steps": "الخطوات",
+        "test_data": "بيانات الاختبار",
         "expected_result": "النتيجة المتوقعة",
+        "notes": "ملاحظات",
     },
     "en": {
         "generated_from": "Test case auto-generated from story",
         "type": "Type",
         "priority": "Priority",
+        "location": "Where (system / screen)",
         "steps": "Steps",
+        "test_data": "Test data",
         "expected_result": "Expected result",
+        "notes": "Notes",
     },
 }
 
@@ -34,12 +40,20 @@ _DESCRIPTION_LABELS = {
 def _build_task_description(tc: TestCase, story_title: str, story_url: str, language: str) -> str:
     labels = _DESCRIPTION_LABELS[language]
     steps_text = "\n".join(f"{i + 1}. {step}" for i, step in enumerate(tc.steps))
-    return (
+    test_data_text = "\n".join(f"- {item}" for item in tc.test_data) or "-"
+    description = (
         f"{labels['generated_from']}: [{story_title}]({story_url})\n\n"
         f"**{labels['type']}:** {tc.type} | **{labels['priority']}:** {tc.priority}\n\n"
+        f"**{labels['location']}:** {tc.location}\n\n"
+        f"**{labels['test_data']}:**\n{test_data_text}\n\n"
         f"**{labels['steps']}:**\n{steps_text}\n\n"
         f"**{labels['expected_result']}:** {tc.expected_result}"
     )
+    # Gaps and assumptions go last, as a closing section of the ticket
+    if tc.notes:
+        notes_text = "\n".join(f"- {note}" for note in tc.notes)
+        description += f"\n\n---\n**{labels['notes']}:**\n{notes_text}"
+    return description
 
 
 def process_story(
